@@ -5,11 +5,14 @@ open System.Collections.Generic
 open System.Linq
 open System.Text.RegularExpressions
 open System.IO
+open System.Diagnostics
+
+open NReadability
 
 open ServiceStack.DataAnnotations
 open ServiceStack.OrmLite
 
-open NReadability
+
 
 open java.io
 open java.util
@@ -44,7 +47,7 @@ type java.util.Iterator with
 
 
 let mysql = new OrmLiteConnectionFactory("Server=localhost;Database=arvi;Uid=test;Pwd=test;", MySqlDialect.Provider)
-let sqlite = new OrmLiteConnectionFactory("./App_Data/News.sqlite", SqliteDialect.Provider)
+let sqlite = new OrmLiteConnectionFactory("../../../../NLP.sqlite", SqliteDialect.Provider)
 
 type NewsArticle() = 
     
@@ -61,6 +64,11 @@ type NewsArticle() =
 type TokenFrequency() = 
     [<PrimaryKeyAttribute>] 
     member val Token = "" with get, set
+    member val Frequency = Unchecked.defaultof<double> with get, set
+
+type CharSingle() = 
+    [<PrimaryKeyAttribute>] 
+    member val Single = "" with get, set
     member val Frequency = Unchecked.defaultof<double> with get, set
 
 type CharTuple() = 
@@ -116,6 +124,7 @@ let tokenizeBySentence(text : string) : List<List<string>> =
     res
 
 let tokensWithCount = Dictionary<string, int>()
+//let charSingles = Dictionary<string, int>()
 let charTuples = Dictionary<string, int>()
 let charTriples = Dictionary<string, int>()
 let charQuadruples = Dictionary<string, int>()
@@ -174,6 +183,11 @@ let extractContentFromHtmlSource() =
 let countCharTuplesAndTriples (tokens:IEnumerable<KeyValuePair<string, int>>) =
     let processToken (token:string) (scale:int) =
         let charArray = token.ToArray()
+//        if charArray.Length >= 1 then
+//            charArray 
+//            |> Seq.windowed 1
+//            |> Seq.map (fun carr -> String(carr))
+//            |> countTokens charSingles scale
         if charArray.Length >= 2 then
             charArray 
             |> Seq.windowed 2
@@ -193,10 +207,19 @@ let countCharTuplesAndTriples (tokens:IEnumerable<KeyValuePair<string, int>>) =
     tokens.ToArray()
     |> Array.Parallel.iter ( fun token -> processToken token.Key token.Value)
 
+//    let totalSingles = ref (charSingles.Sum(fun t -> t.Value))
+//    let sortedSingles = 
+//        charSingles.OrderByDescending(fun kvp -> kvp.Value)
+//            .Take(256).Select(fun kvp -> 
+//                                let ct = CharSingle()
+//                                ct.Single <- kvp.Key
+//                                ct.Frequency <- (double kvp.Value) / (double !totalSingles)
+//                                ct)
+
     let totalTuples = ref (charTuples.Sum(fun t -> t.Value))
     let sortedTuples = 
         charTuples.OrderByDescending(fun kvp -> kvp.Value)
-            .Take(128).Select(fun kvp -> 
+            .Take(256).Select(fun kvp -> 
                                 let ct = CharTuple()
                                 ct.Tuple <- kvp.Key
                                 ct.Frequency <- (double kvp.Value) / (double !totalTuples)
@@ -205,7 +228,7 @@ let countCharTuplesAndTriples (tokens:IEnumerable<KeyValuePair<string, int>>) =
     let totalTriples = ref (charTriples.Sum(fun t -> t.Value))
     let sortedTriples = 
         charTriples.OrderByDescending(fun kvp -> kvp.Value)
-            .Take(128).Select(fun kvp -> 
+            .Take(256).Select(fun kvp -> 
                                 let ct = CharTriple()
                                 ct.Triple <- kvp.Key
                                 ct.Frequency <- (double kvp.Value) / (double !totalTuples)
@@ -213,15 +236,17 @@ let countCharTuplesAndTriples (tokens:IEnumerable<KeyValuePair<string, int>>) =
     let totalQuadruples = ref (charQuadruples.Sum(fun t -> t.Value))
     let sortedQuadruples = 
         charQuadruples.OrderByDescending(fun kvp -> kvp.Value)
-            .Take(128).Select(fun kvp -> 
+            .Take(256).Select(fun kvp -> 
                                 let ct = CharQuadruple()
                                 ct.Quadruple <- kvp.Key
                                 ct.Frequency <- (double kvp.Value) / (double !totalTuples)
                                 ct)
     use db = sqlite.OpenDbConnection()
+    //db.CreateTable<CharSingle>(true)
     db.CreateTable<CharTuple>(true)
     db.CreateTable<CharTriple>(true)
     db.CreateTable<CharQuadruple>(true)
+    //db.SaveAll(sortedSingles) |> ignore
     db.SaveAll(sortedTuples) |> ignore
     db.SaveAll(sortedTriples) |> ignore
     db.SaveAll(sortedQuadruples) |> ignore
@@ -231,6 +256,7 @@ let countCharTuplesAndTriples (tokens:IEnumerable<KeyValuePair<string, int>>) =
 // generate .fs file with dics
 let generateHardCodedDicts() =
     use db = sqlite.OpenDbConnection()
+    //let singles = db.Select<CharSingle>() |> Seq.mapi (fun i t -> KeyValuePair<int, string>(i,t.Single))
     let tuples = db.Select<CharTuple>() |> Seq.mapi (fun i t -> KeyValuePair<int, string>(i,t.Tuple))
     let triples = db.Select<CharTriple>() |> Seq.mapi (fun i t -> KeyValuePair<int, string>(i,t.Triple))
     let quads = db.Select<CharQuadruple>() |> Seq.mapi (fun i t -> KeyValuePair<int, string>(i,t.Quadruple))
@@ -241,31 +267,46 @@ let generateHardCodedDicts() =
     sw.WriteLine("open System")
     sw.WriteLine("open System.Collections.Generic")
     
+    let visibleASCII = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+    sw.WriteLine("let singles = Dictionary<string, int>()")
+    visibleASCII.ToArray()
+    |> Seq.iteri
+        (fun i a -> 
+            sw.WriteLine("singles.Add(@\"" + String(a, 1) + "\", " + i.ToString() + ")")
+            )
+//    for kvp in singles do
+//        sw.WriteLine("singles.Add(\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
+    
     sw.WriteLine("let tuples = Dictionary<string, int>()")
-    for kvp in tuples do
-        sw.WriteLine("tuples.Add(\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
+    for kvp in tuples.Take(128) do
+        sw.WriteLine("tuples.Add(@\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
     
     sw.WriteLine("let triples = Dictionary<string, int>()")
-    for kvp in triples do
-        sw.WriteLine("triples.Add(\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
+    for kvp in triples.Take(128) do
+        sw.WriteLine("triples.Add(@\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
     
     sw.WriteLine("let quads = Dictionary<string, int>()")
-    for kvp in quads do
-        sw.WriteLine("quads.Add(\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
+    for kvp in quads.Take(128) do
+        sw.WriteLine("quads.Add(@\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
     ()
+
+
 
 [<EntryPoint>]
 let main argv = 
-    
+    let sw = new Stopwatch()
+    sw.Start()
     // one-off operation
 
     // moveNewsFromMysqToSqLite()
 
-    //extractContentFromHtmlSource() 
-    //|> countCharTuplesAndTriples
+    extractContentFromHtmlSource() 
+    |> countCharTuplesAndTriples
     
-    // generateHardCodedDicts() 
+    generateHardCodedDicts() 
 
+    sw.Stop()
+    Console.WriteLine("Elapsed ms: " + sw.ElapsedMilliseconds.ToString())
     Console.WriteLine("Press Enter to exit...")
     Console.ReadLine() |> ignore
     0 // return an integer exit code
