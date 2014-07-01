@@ -147,7 +147,7 @@ let extractContentFromHtmlSource() =
 
     let transcoder = NReadabilityTranscoder()
 
-    let articles = db.Select<NewsArticle>().ToArray()
+    let articles = db.Select<NewsArticle>("news_id < 500").ToArray()
     articles
     |> Array.Parallel.iter
             (fun article -> 
@@ -168,7 +168,7 @@ let extractContentFromHtmlSource() =
     let sorted = tokensWithCount.Where(fun kvp -> kvp.Key.Length > 1).OrderByDescending(fun kvp -> kvp.Value)
     let totalTokens = ref (sorted.Sum(fun t -> t.Value))
     let sortedTokens = 
-        tokensWithCount.OrderByDescending(fun kvp -> kvp.Value).Take(1000)
+        tokensWithCount.OrderByDescending(fun kvp -> kvp.Value).Take(5000)
                     .Select(fun kvp -> 
                                 let ct = TokenFrequency()
                                 ct.Token <- kvp.Key
@@ -219,7 +219,7 @@ let countCharTuplesAndTriples (tokens:IEnumerable<KeyValuePair<string, int>>) =
     let totalTuples = ref (charTuples.Sum(fun t -> t.Value))
     let sortedTuples = 
         charTuples.OrderByDescending(fun kvp -> kvp.Value)
-            .Take(256).Select(fun kvp -> 
+            .Take(512).Select(fun kvp -> 
                                 let ct = CharTuple()
                                 ct.Tuple <- kvp.Key
                                 ct.Frequency <- (double kvp.Value) / (double !totalTuples)
@@ -228,7 +228,7 @@ let countCharTuplesAndTriples (tokens:IEnumerable<KeyValuePair<string, int>>) =
     let totalTriples = ref (charTriples.Sum(fun t -> t.Value))
     let sortedTriples = 
         charTriples.OrderByDescending(fun kvp -> kvp.Value)
-            .Take(256).Select(fun kvp -> 
+            .Take(512).Select(fun kvp -> 
                                 let ct = CharTriple()
                                 ct.Triple <- kvp.Key
                                 ct.Frequency <- (double kvp.Value) / (double !totalTuples)
@@ -236,7 +236,7 @@ let countCharTuplesAndTriples (tokens:IEnumerable<KeyValuePair<string, int>>) =
     let totalQuadruples = ref (charQuadruples.Sum(fun t -> t.Value))
     let sortedQuadruples = 
         charQuadruples.OrderByDescending(fun kvp -> kvp.Value)
-            .Take(256).Select(fun kvp -> 
+            .Take(512).Select(fun kvp -> 
                                 let ct = CharQuadruple()
                                 ct.Quadruple <- kvp.Key
                                 ct.Frequency <- (double kvp.Value) / (double !totalTuples)
@@ -278,15 +278,15 @@ let generateHardCodedDicts() =
 //        sw.WriteLine("singles.Add(\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
     
     sw.WriteLine("let tuples = Dictionary<string, int>()")
-    for kvp in tuples.Take(128) do
+    for kvp in tuples.Take(256) do
         sw.WriteLine("tuples.Add(@\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
     
     sw.WriteLine("let triples = Dictionary<string, int>()")
-    for kvp in triples.Take(128) do
+    for kvp in triples.Take(256) do
         sw.WriteLine("triples.Add(@\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
     
     sw.WriteLine("let quads = Dictionary<string, int>()")
-    for kvp in quads.Take(128) do
+    for kvp in quads.Take(256) do
         sw.WriteLine("quads.Add(@\"" + kvp.Value + "\", " + kvp.Key.ToString() + ")")
     ()
 
@@ -300,10 +300,10 @@ let main argv =
 
     // moveNewsFromMysqToSqLite()
 
-    extractContentFromHtmlSource() 
-    |> countCharTuplesAndTriples
-    
-    generateHardCodedDicts() 
+//    extractContentFromHtmlSource() 
+//    |> countCharTuplesAndTriples
+//    
+//    generateHardCodedDicts() 
 
     sw.Stop()
     Console.WriteLine("Elapsed ms: " + sw.ElapsedMilliseconds.ToString())
