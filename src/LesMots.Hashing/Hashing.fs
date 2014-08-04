@@ -51,7 +51,11 @@ module Hashing =
                     for c in charArray do
                         let sub = String(c, 1)
                         let ok, subCode = Chars7.Singles.TryGetValue(sub)
-                        if not ok then raise (ArgumentOutOfRangeException("Non-Ascii char in input"))
+                        if not ok then 
+#if DEBUG
+                            Console.WriteLine("Non-ascii: " + sub)
+#endif
+                            raise (ArgumentOutOfRangeException("Non-Ascii char in input"))
                         l.Add((0, subCode, sub))
                     l
             else hash' word (subLength - 1)
@@ -98,7 +102,11 @@ module Hashing =
                     for c in charArray do
                         let sub = String(c, 1)
                         let ok, subCode = Chars8.Singles.TryGetValue(sub)
-                        if not ok then raise (ArgumentOutOfRangeException("Non-Ascii char in input"))
+                        if not ok then
+#if DEBUG
+                            Console.WriteLine("Non-ascii: " + sub)
+#endif
+                            raise (ArgumentOutOfRangeException("Non-Ascii char in input"))
                         l.Add((0, subCode, sub))
                     l
             else hash' word (subLength - 1)

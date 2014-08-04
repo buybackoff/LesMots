@@ -1,0 +1,13 @@
+User-agent: *
+User-agent: Mediapartners-Google*
+Disallow: /about/careers
+Disallow: /about/careers/
+Disallow: /offlinemessage/
+Disallow: /apps/fbk
+Sitemap: http://www.bloomberg.com/sitemap_index.xml
+Sitemap: http://www.bloomberg.com/sitemap_news.xml
+Sitemap: http://www.bloomberg.com/sitemap_video.xml
+User-agent: Spinn3r
+Disallow: /podcasts/
+Disallow: /feed/podcast/
+Disallow: /bb/avfile/

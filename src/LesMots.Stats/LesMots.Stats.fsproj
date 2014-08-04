@@ -163,7 +163,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MySql.Data">
-      <HintPath>..\..\packages\MySql.Data.6.8.3\lib\net45\MySql.Data.dll</HintPath>
+      <HintPath>..\..\packages\MySql.Data.6.9.2-rc1\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NReadability">
@@ -171,27 +171,27 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Common">
-      <HintPath>..\..\packages\ServiceStack.Common.4.0.22\lib\net40\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\..\packages\ServiceStack.Common.4.0.24\lib\net40\ServiceStack.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\..\packages\ServiceStack.Interfaces.4.0.22\lib\net40\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\..\packages\ServiceStack.Interfaces.4.0.24\lib\net40\ServiceStack.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.OrmLite">
-      <HintPath>..\..\packages\ServiceStack.OrmLite.4.0.22\lib\net40\ServiceStack.OrmLite.dll</HintPath>
+      <HintPath>..\..\packages\ServiceStack.OrmLite.4.0.24\lib\net40\ServiceStack.OrmLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.OrmLite.MySql">
-      <HintPath>..\..\packages\ServiceStack.OrmLite.MySql.4.0.22\lib\net40\ServiceStack.OrmLite.MySql.dll</HintPath>
+      <HintPath>..\..\packages\ServiceStack.OrmLite.MySql.4.0.24\lib\net40\ServiceStack.OrmLite.MySql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.OrmLite.Sqlite.Windows">
-      <HintPath>..\..\packages\ServiceStack.OrmLite.Sqlite.Windows.4.0.22\lib\net40\ServiceStack.OrmLite.Sqlite.Windows.dll</HintPath>
+      <HintPath>..\..\packages\ServiceStack.OrmLite.Sqlite.Windows.4.0.24\lib\net40\ServiceStack.OrmLite.Sqlite.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\packages\ServiceStack.Text.4.0.22\lib\net40\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\..\packages\ServiceStack.Text.4.0.24\lib\net40\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SgmlReaderDll">

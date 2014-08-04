@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{7881
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LesMots.Crawler", "src\LesMots.Crawler\LesMots.Crawler.fsproj", "{742C708C-B447-4FE9-99C8-5513EB4A3090}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{88E0FA75-6CE6-4188-8C6C-879B69D7F9E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88E0FA75-6CE6-4188-8C6C-879B69D7F9E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88E0FA75-6CE6-4188-8C6C-879B69D7F9E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{742C708C-B447-4FE9-99C8-5513EB4A3090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{742C708C-B447-4FE9-99C8-5513EB4A3090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{742C708C-B447-4FE9-99C8-5513EB4A3090}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{742C708C-B447-4FE9-99C8-5513EB4A3090}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

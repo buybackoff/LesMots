@@ -3,6 +3,9 @@
 open System
 open System.Collections.Generic
 
+// TODO add French, Nordic, Turkish, Spanish (ñ), German(ß, Ä/ä, Ö/ö, Ü/ü) 
+// symbols to singles in Chars8 case so that we could cover most Latin-based languages
+
 type Chars7() = 
     static let singles = Dictionary<string, int>()
     static let tuples = Dictionary<string, int>()
@@ -106,7 +109,8 @@ type Chars7() =
         singles.Add("~", 93)
         singles.Add("™", 94)
         singles.Add("℃", 95)
-
+        singles.Add("°", 96)
+        
         tuples.Add("in", 0)
         tuples.Add("th", 1)
         tuples.Add("er", 2)
@@ -599,6 +603,7 @@ type Chars8() =
         singles.Add("~", 93)
         singles.Add("™", 94)
         singles.Add("℃", 95)
+        singles.Add("°", 96)
         // ™ ℃ 
 
         tuples.Add(@"in", 0)
