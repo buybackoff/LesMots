@@ -14,8 +14,11 @@ open Ractor
 [<EntryPoint>]
 let main argv = 
     
+//    let robots = Crawler.tryFetchRobots("file:///" + __SOURCE_DIRECTORY__ + "/data/robots.txt")
+//                |> Async.RunSynchronously
 
-    let robots = Crawler.tryGetRobots("http://wsj.com") |> Async.RunSynchronously
+    let robots = Crawler.tryGetRobots("http://www.bloomberg.com")
+                |> Async.RunSynchronously
 
     let a = 1
 

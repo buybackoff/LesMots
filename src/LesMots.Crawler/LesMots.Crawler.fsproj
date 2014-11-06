@@ -34,12 +34,8 @@
     <DocumentationFile>bin\Release\LesMots.Crawler.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FsPickler">
-      <HintPath>..\..\packages\FsPickler.0.9.9\lib\net45\FsPickler.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FsPickler.Json">
-      <HintPath>..\..\packages\FsPickler.Json.0.9.9\lib\net45\FsPickler.Json.dll</HintPath>
+    <Reference Include="AWSSDK">
+      <HintPath>..\..\packages\AWSSDK.2.2.2.0\lib\net45\AWSSDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FsUnit.NUnit">
@@ -48,7 +44,7 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -56,11 +52,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Ractor">
-      <HintPath>..\..\packages\Ractor.0.2.0\lib\net40\Ractor.dll</HintPath>
+      <HintPath>..\..\packages\Ractor.0.2.2\lib\net40\Ractor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ractor.Persistence">
-      <HintPath>..\..\packages\Ractor.Persistence.0.2.0\lib\net40\Ractor.Persistence.dll</HintPath>
+      <HintPath>..\..\packages\Ractor.Persistence.0.2.2\lib\net40\Ractor.Persistence.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ractor.Persistence.AWS">
+      <HintPath>..\..\packages\Ractor.Persistence.AWS.0.2.2\lib\net40\Ractor.Persistence.AWS.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RobotsTxt">
@@ -92,12 +92,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Settings.fs" />
+    <Compile Include="Types.fs" />
     <Compile Include="Crawler.fs" />
     <Compile Include="Page.fs" />
     <Compile Include="Sitemaps.fs" />
@@ -106,6 +109,7 @@
     <None Include="app.config" />
     <Compile Include="Utils.fs" />
     <Compile Include="Program.fs" />
+    <None Include="appsettings.config" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

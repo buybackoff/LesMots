@@ -1,6 +1,6 @@
 ﻿#r "System.Xml.Linq"
 #r "../../packages/FsUnit.1.3.0.1/Lib/Net40/FsUnit.NUnit.dll"
-#r "../../packages/Ractor.0.2.0/Lib/Net40/Ractor.dll"
+#r "../../packages/Ractor.0.2.1/Lib/Net40/Ractor.dll"
 
 #load "Crawler.fs"
 open LesMots
