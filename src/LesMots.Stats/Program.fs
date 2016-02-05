@@ -123,6 +123,29 @@ let tokenizeBySentence(text : string) : List<List<string>> =
                 |> fun p -> p.ToList()
     res
 
+
+let concordance(text : string) : SortedList<string, List<int> * List<int>> =
+  let dict = SortedList<string, List<int> * List<int>>()
+  let sentences = tokenizeBySentence text
+  sentences
+  |> Seq.iteri (fun sentenseIdx sentence ->
+      sentence
+      |> Seq.iter (fun token ->
+          let token = token.ToLowerInvariant()
+          if dict.ContainsKey(token) then
+            let freq, occur =  dict.[token]
+            freq.[0] <- freq.[0] + 1
+            occur.Add(sentenseIdx + 1)
+          else
+            let freq = List<int>()
+            freq.Add(1)
+            let occur = List<int>()
+            occur.Add(sentenseIdx + 1)
+            dict.[token] <- (freq, occur)
+        )
+    )
+  dict
+
 let tokensWithCount = Dictionary<string, int>()
 //let charSingles = Dictionary<string, int>()
 let charTuples = Dictionary<string, int>()
@@ -296,6 +319,15 @@ let generateHardCodedDicts() =
 let main argv = 
     let sw = new Stopwatch()
     sw.Start()
+
+    // http://www.bloomberg.com/news/articles/2016-02-05/the-rich-are-already-using-robo-advisers-and-that-scares-banks
+    let sampleText = "Millennials and small investors aren’t the only ones using robo-advisers, a group that includes pioneers Wealthfront Inc. and Betterment LLC and services provided by mutual-fund giants, said Kendra Thompson, an Accenture Plc managing director. At Charles Schwab Corp., about 15 percent of those in automated portfolios have at least $1 million at the company."
+    
+    let conc = concordance(sampleText)
+
+    for item in conc do
+      if item.Key.Any(fun ch -> Char.IsLetter(ch)) then
+        printfn "%s - {%d:%s}" item.Key (fst item.Value).[0] (String.Join (",", (snd item.Value)))
     // one-off operation
 
     // moveNewsFromMysqToSqLite()
